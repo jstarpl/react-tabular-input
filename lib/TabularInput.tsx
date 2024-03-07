@@ -122,7 +122,7 @@ export function TabularInput({
 			type: "SET_VALUE",
 			value,
 		});
-	}, [value, dispatch]);
+	}, [isControlled, value]);
 
 	useEffect(() => {
 		if (!onChange) return;
@@ -151,26 +151,25 @@ export function TabularInput({
 
 			const targetEl = e.target;
 
-			// TODO: If e.altKey, just move with select all
-
-			let key = e.key;
+			const key = e.key;
+			let code = e.code;
 
 			if (targetEl instanceof HTMLInputElement && !e.altKey) {
 				if (targetEl.selectionStart !== targetEl.selectionEnd) return;
-				if (targetEl.selectionStart !== 0 && key === "ArrowLeft") return;
+				if (targetEl.selectionStart !== 0 && code === "ArrowLeft") return;
 				if (
 					targetEl.selectionStart !== targetEl.value.length &&
-					key === "ArrowRight"
+					code === "ArrowRight"
 				)
 					return;
 
 				if (
 					targetEl.selectionStart === targetEl.selectionEnd &&
 					targetEl.selectionStart === 0 &&
-					key === "Backspace" &&
+					code === "Backspace" &&
 					targetEl.value === ""
 				) {
-					key = "ArrowLeft";
+					code = "ArrowLeft";
 				}
 			}
 
@@ -187,7 +186,7 @@ export function TabularInput({
 
 			if (e.altKey) e.preventDefault();
 
-			const nextFocus = getNextFocus(targetEl, key, rootEl);
+			const nextFocus = getNextFocus(targetEl, code, rootEl);
 			if (!nextFocus) return;
 
 			e.preventDefault();

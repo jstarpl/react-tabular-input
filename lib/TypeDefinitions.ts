@@ -2,7 +2,7 @@ import { ReactElement } from "react";
 
 export type ChangeEventHandler = (value: string) => void;
 export type RichColumnDefinition = {
-	label: ReactElement | null;
+	label: ReactElement | string | null;
 	width: string;
 	tag: string | number;
 };

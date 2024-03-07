@@ -90,7 +90,6 @@ export function stateReducer(
 				newState.fieldSeparator,
 			);
 			newState.stringifiedValue = updateStringifiedValue(newState);
-			console.log({ currentValue: newState.currentValue, action });
 			return newState;
 		}
 		case "INSERT_ROW": {

@@ -221,7 +221,6 @@ export const RecordRow = React.memo(function RecordRow({
 			});
 		}
 
-		console.log(text, customDataMaybe);
 		setIsDragOver(false);
 	}
 
