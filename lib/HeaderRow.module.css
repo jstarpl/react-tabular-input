@@ -1,0 +1,7 @@
+.HeaderRowCell {
+	font-weight: bold;
+	padding: var(
+		--tabular-input-cell-padding,
+		var(--tabular-input-cell-padding-default)
+	);
+}

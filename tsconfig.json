@@ -24,6 +24,6 @@
       "@components/*": ["./lib/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "lib"],
   "references": [{ "path": "./tsconfig.node.json" }],
 }

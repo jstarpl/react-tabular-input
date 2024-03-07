@@ -1,33 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import { TabularInput } from "@components/TabularInput"
-import './App.css'
+import { TabularInput } from "@components/TabularInput";
+import "./App.css";
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+	const [value, setValue] = useState("Raz,Dwa,Dwa B\nTrzy,Cztery,Cztery B");
 
-  return (
-    <>
-      <div>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <TabularInput />
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	// useEffect(() => {
+	// 	console.log(value);
+	// }, [value]);
+
+	return (
+		<>
+			<TabularInput
+				value={value}
+				columns={["Raz", "Dwa", "Trzy"]}
+				showInsertButton
+				insertButtonLabel={"Dodaj wiersz"}
+				onChange={setValue}
+			/>
+			<textarea
+				value={value}
+				cols={80}
+				rows={10}
+				onChange={(e) => setValue(e.target.value)}
+			/>
+		</>
+	);
 }
 
-export default App
+export default App;

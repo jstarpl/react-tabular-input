@@ -1,0 +1,7 @@
+.TabularInput {
+	display: grid;
+	max-width: none;
+	text-align: initial;
+
+	--tabular-input-cell-padding-default: 3px;
+}

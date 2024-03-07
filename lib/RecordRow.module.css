@@ -1,0 +1,30 @@
+.RecordRowCell {
+	max-width: none;
+	min-width: 0;
+	width: auto;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.RecordRowCell:focus-within {
+	background: var(--tabular-input-edited-cell-background, Highlight);
+	color: var(--tabular-input-edited-cell-color, HighlightText);
+}
+
+.RecordRowInput {
+	width: 100%;
+	border: none;
+	background: none;
+	outline: none;
+	color: inherit;
+	font-family: inherit;
+	font-size: inherit;
+	padding: var(
+		--tabular-input-cell-padding,
+		var(--tabular-input-cell-padding-default)
+	);
+}
+
+.RecordRowInput:focus {
+	outline: none;
+}
