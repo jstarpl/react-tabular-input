@@ -41,17 +41,29 @@ export function TabularInput({
 	dragHandle,
 	columns,
 }: {
+	/** The controlled value of the input */
 	value?: string;
+	/** The intial value of the input when running uncontrolled */
 	defaultValue?: string;
+	/** Callback for when the value of the input changes */
 	onChange?: ChangeEventHandler;
+	/** Should dragging/reordering be available */
 	draggable?: boolean;
+	/** Character that should be used as the record separator. `\n` by default. */
 	recordSeparator?: string;
+	/** Character that should be used as the field separator. `\t` by default. */
 	fieldSeparator?: string;
+	/** Should the "insert" button be shown. Enter key always works. */
 	showInsertButton?: boolean;
+	/** Label for the "Insert" button. */
 	insertButtonLabel?: React.ReactNode;
+	/** Labels for the "Delete" buttons on every record. */
 	deleteButtonLabel?: React.ReactNode;
+	/** The range that should be highlighted. Rows with highlight receive the `data-highlight` attribute. */
 	highlightRange?: [number, number];
+	/** The element that should be used as a drag handle for the records */
 	dragHandle?: React.ReactNode;
+	/** Description of the columns used. If not provided, the number of columns will be deduced from `value` or `defaultValue`. */
 	columns?: ColumnDefinition;
 }): React.JSX.Element | null {
 	const [rootEl, setRootEl] = useState<HTMLElement | null>(null);
@@ -99,12 +111,12 @@ export function TabularInput({
 	}, [isControlled, value]);
 
 	useEffect(() => {
-		if (value === undefined) {
+		if (value === undefined && isControlled) {
 			console.warn(
 				"Input needs to be either controlled or not controlled. Provide an initial value (f.g. an empty string) to make it controlled from mount.",
 			);
-			return;
 		}
+		if (value === undefined) return;
 
 		dispatch({
 			type: "SET_VALUE",

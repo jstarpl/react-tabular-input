@@ -3,7 +3,7 @@ import "./App.css";
 import { useState } from "react";
 
 function App() {
-	const [value, setValue] = useState("Raz\tDwa\tDwa B\nTrzy\tCztery\tCztery B");
+	const [value, setValue] = useState("One\tTwo\tThree B\nFour\tFive\tSix");
 
 	return (
 		<>
@@ -11,25 +11,25 @@ function App() {
 				value={value}
 				columns={[
 					{
-						label: <>Raz dwa trzy</>,
-						tag: "Raz",
-						width: "1fr",
+						label: <>Column 1</>,
+						tag: "C1",
+						width: "2fr",
 					},
 					{
-						label: <>Dwa</>,
-						tag: "Dwa",
-						width: "70px",
+						label: <>Column 2</>,
+						tag: "C2",
+						width: "100px",
 					},
 					{
-						label: <u>Trzy</u>,
-						tag: "Trzy",
-						width: "1fr",
+						label: <em>Column 3</em>,
+						tag: "C3",
+						width: "3fr",
 					},
 				]}
 				showInsertButton
 				draggable
 				highlightRange={[0, 1]}
-				insertButtonLabel={"Dodaj wiersz"}
+				insertButtonLabel={"Add row"}
 				deleteButtonLabel={"Del"}
 				onChange={setValue}
 			/>
