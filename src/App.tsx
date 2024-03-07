@@ -3,11 +3,7 @@ import "./App.css";
 import { useState } from "react";
 
 function App() {
-	const [value, setValue] = useState("Raz,Dwa,Dwa B\nTrzy,Cztery,Cztery B");
-
-	// useEffect(() => {
-	// 	console.log(value);
-	// }, [value]);
+	const [value, setValue] = useState("Raz\tDwa\tDwa B\nTrzy\tCztery\tCztery B");
 
 	return (
 		<>
@@ -15,7 +11,10 @@ function App() {
 				value={value}
 				columns={["Raz", "Dwa", "Trzy"]}
 				showInsertButton
+				draggable
+				fieldSeparator={"\t"}
 				insertButtonLabel={"Dodaj wiersz"}
+				deleteButtonLabel={"Del"}
 				onChange={setValue}
 			/>
 			<textarea

@@ -27,6 +27,7 @@ export function TabularInput({
 	value,
 	defaultValue,
 	onChange,
+	draggable,
 	recordSeparator,
 	fieldSeparator,
 	showInsertButton,
@@ -37,11 +38,13 @@ export function TabularInput({
 	value?: string;
 	defaultValue?: string;
 	onChange?: ChangeEventHandler;
+	draggable?: boolean;
 	recordSeparator?: string;
 	fieldSeparator?: string;
 	showInsertButton?: boolean;
 	insertButtonLabel?: React.ReactNode;
 	deleteButtonLabel?: React.ReactNode;
+	dragHandle?: React.ReactNode;
 	columns?: ColumnDefinition;
 }): React.JSX.Element | null {
 	const [rootEl, setRootEl] = useState<HTMLElement | null>(null);
@@ -63,11 +66,13 @@ export function TabularInput({
 	const rootStyle = useMemo<React.CSSProperties>(
 		() => ({
 			gridTemplateColumns:
+				(draggable ? "min-content " : "") +
 				arrayRange(0, columnsCount)
 					.map(() => "1fr")
-					.join(" ") + " min-content",
+					.join(" ") +
+				" min-content",
 		}),
-		[columnsCount],
+		[columnsCount, draggable],
 	);
 
 	useEffect(() => {
@@ -185,19 +190,22 @@ export function TabularInput({
 			aria-colcount={columnsCount}
 		>
 			<DispatchContext.Provider value={dispatch}>
-				{columns ? <HeaderRow columns={columns} /> : null}
+				{columns ? (
+					<HeaderRow columns={columns} draggable={draggable ?? false} />
+				) : null}
 				{state.currentValue.map((record, index) => (
 					<RecordRow
 						record={record}
 						index={index}
 						key={index}
 						columns={columnsCount}
+						draggable={draggable ?? false}
 						fieldSeparator={state.fieldSeparator}
 						deleteButtonLabel={deleteButtonLabel}
 					/>
 				))}
 				{showInsertButton ? (
-					<InsertButton>{insertButtonLabel ?? "Add new row"}</InsertButton>
+					<InsertButton>{insertButtonLabel ?? "➕"}</InsertButton>
 				) : null}
 			</DispatchContext.Provider>
 		</div>

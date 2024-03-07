@@ -4,11 +4,14 @@ import classes from "./HeaderRow.module.css";
 
 export function HeaderRow({
 	columns,
+	draggable,
 }: {
 	columns: ColumnDefinition;
+	draggable: boolean;
 }): React.JSX.Element {
 	return (
 		<>
+			{draggable ? <div /> : null}
 			{columns.map((column, index) => (
 				<div
 					key={column}

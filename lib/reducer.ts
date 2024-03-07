@@ -35,8 +35,18 @@ export type Action =
 			index: number;
 	  }
 	| {
+			type: "MOVE_ROW";
+			sourceIndex: number;
+			targetIndex: number;
+	  }
+	| {
 			type: "DELETE_ROW";
 			index: number;
+	  }
+	| {
+			type: "PASTE_VALUES";
+			values: string;
+			targetIndex: number;
 	  }
 	| {
 			type: "DEMAND_FOCUS";
@@ -94,10 +104,38 @@ export function stateReducer(
 			newState.demandFocus = [insertIndex, 0];
 			return newState;
 		}
+		case "MOVE_ROW": {
+			const newState = objectCopy(state);
+			newState.currentValue = newState.currentValue.slice();
+			const targetRow = newState.currentValue[action.sourceIndex];
+			newState.currentValue.splice(action.sourceIndex, 1);
+			newState.currentValue.splice(action.targetIndex, 0, targetRow);
+			newState.stringifiedValue = updateStringifiedValue(newState);
+			return newState;
+		}
 		case "DELETE_ROW": {
 			const newState = objectCopy(state);
 			newState.currentValue = newState.currentValue.slice();
 			newState.currentValue.splice(action.index, 1);
+			newState.stringifiedValue = updateStringifiedValue(newState);
+			return newState;
+		}
+		case "PASTE_VALUES": {
+			const newState = objectCopy(state);
+			let targetIndex = action.targetIndex;
+			if (targetIndex === -1) targetIndex = newState.currentValue.length;
+
+			const parsedData = parseData(
+				action.values,
+				PASTE_VALUES_RECORD_SEPARATOR,
+				PASTE_VALUES_FIELD_SEPARATOR,
+			);
+			newState.currentValue = newState.currentValue.slice();
+			newState.currentValue.splice(targetIndex, 0, ...parsedData);
+			newState.demandFocus = [
+				targetIndex + parsedData.length - 1,
+				(parsedData?.[parsedData.length - 1]?.length ?? 1) - 1,
+			];
 			newState.stringifiedValue = updateStringifiedValue(newState);
 			return newState;
 		}
@@ -142,8 +180,8 @@ function objectCopy<T>(obj: T): T {
 
 function parseData(
 	data: string,
-	recordSeparator: string,
-	fieldSeparator: string,
+	recordSeparator: string | RegExp,
+	fieldSeparator: string | RegExp,
 ): RecordArray {
 	if (data.trim().length === 0) return [];
 
@@ -168,6 +206,9 @@ function stringifyData(
 		})
 		.join(recordSeparator);
 }
+
+const PASTE_VALUES_RECORD_SEPARATOR = /\r\n|\r|\n/;
+const PASTE_VALUES_FIELD_SEPARATOR = /,|;|\t|\|/;
 
 export type Dispatch = (action: Action) => void;
 

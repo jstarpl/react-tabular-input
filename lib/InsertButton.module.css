@@ -3,3 +3,14 @@
 	font-size: inherit;
 	font-family: inherit;
 }
+
+.InsertButtonDragOver {
+	background: var(
+		--tabular-input-button-hover-background,
+		var(--tabular-input-button-hover-background-default)
+	);
+	color: var(
+		--tabular-input-button-hover-color,
+		var(--tabular-input-button-hover-color-default)
+	);
+}
