@@ -70,6 +70,7 @@ export function TabularInput({
 	const [rootEl, setRootEl] = useState<HTMLElement | null>(null);
 	const externalValue = useRef<string | undefined>(value);
 	const [isControlled, setIsControlled] = useState(value !== undefined);
+	const onChangeRef = useRef<ChangeEventHandler | undefined>(undefined);
 
 	const [state, dispatch] = useReducer<typeof stateReducer, InitializerProps>(
 		stateReducer,
@@ -128,10 +129,18 @@ export function TabularInput({
 	}, [isControlled, value]);
 
 	useEffect(() => {
-		if (!onChange) return;
+		onChangeRef.current = onChange;
+	}, [onChange]);
 
-		onChange(state.stringifiedValue);
-	}, [onChange, state.stringifiedValue]);
+	useEffect(() => {
+		const clb = onChangeRef.current;
+		if (!clb) return;
+		const newValue = state.stringifiedValue;
+
+		if (externalValue.current === newValue) return;
+
+		clb(state.stringifiedValue);
+	}, [state.stringifiedValue]);
 
 	useEffect(() => {
 		if (!rootEl || !state.demandFocus) return;
