@@ -9,10 +9,26 @@ function App() {
 		<>
 			<TabularInput
 				value={value}
-				columns={["Raz", "Dwa", "Trzy"]}
+				columns={[
+					{
+						label: <>Raz dwa trzy</>,
+						tag: "Raz",
+						width: "1fr",
+					},
+					{
+						label: <>Dwa</>,
+						tag: "Dwa",
+						width: "70px",
+					},
+					{
+						label: <u>Trzy</u>,
+						tag: "Trzy",
+						width: "1fr",
+					},
+				]}
 				showInsertButton
 				draggable
-				fieldSeparator={"\t"}
+				highlightRange={[0, 1]}
 				insertButtonLabel={"Dodaj wiersz"}
 				deleteButtonLabel={"Del"}
 				onChange={setValue}

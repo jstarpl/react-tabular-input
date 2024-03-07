@@ -14,12 +14,12 @@ export function HeaderRow({
 			{draggable ? <div /> : null}
 			{columns.map((column, index) => (
 				<div
-					key={column}
+					key={typeof column === "string" ? column : column.tag}
 					className={`TabularInput__HeaderRowCell ${classes.HeaderRowCell}`}
 					role="columnheader"
 					aria-colindex={index + 1}
 				>
-					{column}
+					{typeof column === "string" ? column : column.label}
 				</div>
 			))}
 			<div

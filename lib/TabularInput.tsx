@@ -11,7 +11,11 @@ import { getNextFocus } from "@bbc/tv-lrud-spatial";
 import classes from "./TabularInput.module.css";
 import { arrayRange } from "./lib.ts";
 import { InsertButton } from "./InsertButton.tsx";
-import { ChangeEventHandler, ColumnDefinition } from "./TypeDefinitions.ts";
+import {
+	ChangeEventHandler,
+	ColumnDefinition,
+	RichColumnDefinition,
+} from "./TypeDefinitions.ts";
 import { HeaderRow } from "./HeaderRow.tsx";
 import {
 	DispatchContext,
@@ -21,7 +25,7 @@ import {
 } from "./reducer.ts";
 
 const DEFAULT_RECORD_SEPARATOR = "\n";
-const DEFAULT_FIELD_SEPARATOR = ",";
+const DEFAULT_FIELD_SEPARATOR = "\t";
 
 export function TabularInput({
 	value,
@@ -33,6 +37,8 @@ export function TabularInput({
 	showInsertButton,
 	insertButtonLabel,
 	deleteButtonLabel,
+	highlightRange,
+	dragHandle,
 	columns,
 }: {
 	value?: string;
@@ -44,6 +50,7 @@ export function TabularInput({
 	showInsertButton?: boolean;
 	insertButtonLabel?: React.ReactNode;
 	deleteButtonLabel?: React.ReactNode;
+	highlightRange?: [number, number];
 	dragHandle?: React.ReactNode;
 	columns?: ColumnDefinition;
 }): React.JSX.Element | null {
@@ -63,16 +70,23 @@ export function TabularInput({
 
 	const columnsCount = columns?.length ?? state.currentValue?.[0]?.length ?? 1;
 
+	const richColumns =
+		(columns?.length ?? 0) > 0 &&
+		typeof columns![0] === "object" &&
+		(columns as RichColumnDefinition[]);
+
 	const rootStyle = useMemo<React.CSSProperties>(
 		() => ({
 			gridTemplateColumns:
 				(draggable ? "min-content " : "") +
-				arrayRange(0, columnsCount)
-					.map(() => "1fr")
-					.join(" ") +
+				(richColumns !== false
+					? richColumns.map((column) => column.width).join(" ")
+					: arrayRange(0, columnsCount)
+							.map(() => "1fr")
+							.join(" ")) +
 				" min-content",
 		}),
-		[columnsCount, draggable],
+		[columnsCount, richColumns, draggable],
 	);
 
 	useEffect(() => {
@@ -200,6 +214,12 @@ export function TabularInput({
 						key={index}
 						columns={columnsCount}
 						draggable={draggable ?? false}
+						dragHandle={dragHandle}
+						highlight={
+							highlightRange
+								? index >= highlightRange[0] && index < highlightRange[1]
+								: false
+						}
 						fieldSeparator={state.fieldSeparator}
 						deleteButtonLabel={deleteButtonLabel}
 					/>

@@ -10,6 +10,8 @@ export const RecordRow = React.memo(function RecordRow({
 	fieldSeparator,
 	deleteButtonLabel,
 	draggable,
+	highlight,
+	dragHandle,
 }: {
 	record: string[];
 	index: number;
@@ -17,6 +19,8 @@ export const RecordRow = React.memo(function RecordRow({
 	fieldSeparator: string | undefined;
 	deleteButtonLabel: React.ReactNode;
 	draggable: boolean;
+	highlight: boolean | undefined;
+	dragHandle: React.ReactNode | undefined;
 }): React.JSX.Element {
 	const dispatch = useContext(DispatchContext);
 	const ref = useRef<HTMLDivElement>(null);
@@ -275,6 +279,7 @@ export const RecordRow = React.memo(function RecordRow({
 			className={`TabularInput__RecordRow ${classes.RecordRow}`}
 			ref={ref}
 			data-odd-even={index % 2 === 0 ? "even" : "odd"}
+			data-highlight={highlight === true ? true : undefined}
 			onDrop={onDrop}
 			onDragEnter={onDragEnter}
 			onDragOver={onDragOver}
@@ -289,7 +294,7 @@ export const RecordRow = React.memo(function RecordRow({
 					tabIndex={-1}
 					role="button"
 				>
-					≡
+					{dragHandle ?? "≡"}
 				</button>
 			) : null}
 			{allCollumns}
