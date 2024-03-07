@@ -1,8 +1,9 @@
 {
   "name": "@jstarpl/react-tabular-input",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
-  "main": "dist/react-tabular-input.js",
+  "main": "./dist/react-tabular-input.js",
+  "types": "./dist/main.d.ts",
   "files": [
     "dist",
     "README.md"
