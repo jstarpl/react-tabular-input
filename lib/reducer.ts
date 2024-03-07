@@ -182,7 +182,7 @@ function parseData(
 	recordSeparator: string | RegExp,
 	fieldSeparator: string | RegExp,
 ): RecordArray {
-	if (data.trim().length === 0) return [];
+	if (data.length === 0) return [];
 
 	return data
 		.split(recordSeparator)

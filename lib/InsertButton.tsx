@@ -52,7 +52,7 @@ export function InsertButton({
 			e.dataTransfer.types.includes("text/plain") &&
 			!e.dataTransfer.types.includes(CUSTOM_MIME_TYPE)
 		) {
-			e.dataTransfer.effectAllowed = "copy";
+			e.dataTransfer.dropEffect = "copy";
 			e.preventDefault();
 		} else {
 			return;

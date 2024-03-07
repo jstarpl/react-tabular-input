@@ -192,6 +192,7 @@ export const RecordRow = React.memo(function RecordRow({
 	function onDragStart(e: React.DragEvent<HTMLButtonElement>) {
 		e.dataTransfer.setDragImage(ref.current ?? e.currentTarget, 0, 0);
 		e.dataTransfer.items.add(record.join(fieldSeparator), "text/plain");
+		e.dataTransfer.effectAllowed = "copyMove";
 		e.dataTransfer.items.add(
 			JSON.stringify({ sourceIndex: index }),
 			CUSTOM_MIME_TYPE,
@@ -201,10 +202,9 @@ export const RecordRow = React.memo(function RecordRow({
 	function onDrop(e: React.DragEvent<HTMLDivElement>) {
 		if (!dispatch) throw new Error("Must be used within a DispatchContext");
 
-		const text = e.dataTransfer.getData("text/plain");
-		const customDataMaybe = e.dataTransfer.getData(CUSTOM_MIME_TYPE);
 		e.preventDefault();
-		if (customDataMaybe) {
+		if (e.dataTransfer.types.includes(CUSTOM_MIME_TYPE)) {
+			const customDataMaybe = e.dataTransfer.getData(CUSTOM_MIME_TYPE);
 			const customData = JSON.parse(customDataMaybe);
 			const sourceIndex = customData.sourceIndex;
 
@@ -213,7 +213,8 @@ export const RecordRow = React.memo(function RecordRow({
 				sourceIndex,
 				targetIndex: index,
 			});
-		} else {
+		} else if (e.dataTransfer.types.includes("text/plain")) {
+			const text = e.dataTransfer.getData("text/plain");
 			dispatch({
 				type: "PASTE_VALUES",
 				targetIndex: index,
@@ -225,14 +226,11 @@ export const RecordRow = React.memo(function RecordRow({
 	}
 
 	function onDragOver(e: React.DragEvent<HTMLDivElement>) {
-		if (
-			e.dataTransfer.types.includes("text/plain") &&
-			e.dataTransfer.types.includes(CUSTOM_MIME_TYPE)
-		) {
-			e.dataTransfer.effectAllowed = "linkMove";
+		if (e.dataTransfer.types.includes(CUSTOM_MIME_TYPE)) {
+			e.dataTransfer.dropEffect = "move";
 			e.preventDefault();
 		} else if (e.dataTransfer.types.includes("text/plain")) {
-			e.dataTransfer.effectAllowed = "copy";
+			e.dataTransfer.dropEffect = "copy";
 			e.preventDefault();
 		} else {
 			return;
