@@ -3,6 +3,7 @@ import React, {
 	useEffect,
 	useMemo,
 	useReducer,
+	useRef,
 	useState,
 } from "react";
 import { RecordRow } from "./RecordRow.tsx";
@@ -67,6 +68,7 @@ export function TabularInput({
 	columns?: ColumnDefinition;
 }): React.JSX.Element | null {
 	const [rootEl, setRootEl] = useState<HTMLElement | null>(null);
+	const externalValue = useRef<string | undefined>(value);
 	const [isControlled, setIsControlled] = useState(value !== undefined);
 
 	const [state, dispatch] = useReducer<typeof stateReducer, InitializerProps>(
@@ -116,8 +118,9 @@ export function TabularInput({
 				"Input needs to be either controlled or not controlled. Provide an initial value (f.g. an empty string) to make it controlled from mount.",
 			);
 		}
-		if (value === undefined) return;
+		if (value === undefined || externalValue.current === value) return;
 
+		externalValue.current = value;
 		dispatch({
 			type: "SET_VALUE",
 			value,
