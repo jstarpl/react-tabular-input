@@ -46,5 +46,9 @@
   },
   "dependencies": {
     "@bbc/tv-lrud-spatial": "^0.0.10"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
