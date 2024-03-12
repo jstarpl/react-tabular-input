@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React from "react";
-import { RecordArray } from "./TypeDefinitions";
+import { RecordArray, RowQuery } from "./TypeDefinitions";
 import { assertNever } from "./lib";
 
 export type ComponentState = {
@@ -10,6 +10,9 @@ export type ComponentState = {
 	currentValue: RecordArray;
 	stringifiedValue: string;
 	demandFocus: [number, number] | null;
+	callbacks: {
+		shouldAllowDeleteRow?: RowQuery;
+	};
 };
 
 export type InitializerProps = {
@@ -17,6 +20,9 @@ export type InitializerProps = {
 	columnsCount?: number;
 	recordSeparator: string;
 	fieldSeparator: string;
+	callbacks: {
+		shouldAllowDeleteRow?: RowQuery;
+	};
 };
 
 export type Action =
@@ -55,6 +61,11 @@ export type Action =
 	  }
 	| {
 			type: "DONE_FOCUS";
+	  }
+	| {
+			type: "CHANGE_CALLBACK";
+			name: keyof ComponentState["callbacks"];
+			callback: RowQuery | undefined;
 	  };
 
 export function stateReducer(
@@ -113,6 +124,14 @@ export function stateReducer(
 			return newState;
 		}
 		case "DELETE_ROW": {
+			if (
+				state.callbacks.shouldAllowDeleteRow?.(
+					action.index,
+					state.currentValue.length,
+				) === false
+			)
+				return state;
+
 			const newState = objectCopy(state);
 			newState.currentValue = newState.currentValue.slice();
 			newState.currentValue.splice(action.index, 1);
@@ -148,6 +167,13 @@ export function stateReducer(
 			newState.demandFocus = null;
 			return newState;
 		}
+		case "CHANGE_CALLBACK": {
+			const newState = objectCopy(state);
+			const newCallbacks = objectCopy(newState.callbacks);
+			newCallbacks[action.name] = action.callback;
+			newState.callbacks = newCallbacks;
+			return newState;
+		}
 		default:
 			assertNever(action);
 			return state;
@@ -159,6 +185,7 @@ export function stateInitializer({
 	columnsCount,
 	recordSeparator,
 	fieldSeparator,
+	callbacks,
 }: InitializerProps): ComponentState {
 	value ??= "";
 	const data = parseData(value, recordSeparator, fieldSeparator);
@@ -170,6 +197,7 @@ export function stateInitializer({
 		demandFocus: null,
 		recordSeparator,
 		fieldSeparator,
+		callbacks,
 	};
 }
 

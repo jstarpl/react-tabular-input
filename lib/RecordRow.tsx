@@ -12,6 +12,7 @@ export const RecordRow = React.memo(function RecordRow({
 	draggable,
 	highlight,
 	dragHandle,
+	deleteDisabled,
 }: {
 	record: string[];
 	index: number;
@@ -21,6 +22,7 @@ export const RecordRow = React.memo(function RecordRow({
 	draggable: boolean;
 	highlight: boolean | undefined;
 	dragHandle: React.ReactNode | undefined;
+	deleteDisabled?: boolean;
 }): React.JSX.Element {
 	const dispatch = useContext(DispatchContext);
 	const ref = useRef<HTMLDivElement>(null);
@@ -299,6 +301,7 @@ export const RecordRow = React.memo(function RecordRow({
 				className="TabularInput__RecordRowDelete lrud-ignore"
 				tabIndex={-1}
 				onClick={onDeleteClick}
+				disabled={deleteDisabled}
 			>
 				{deleteButtonLabel ?? "❌"}
 			</button>

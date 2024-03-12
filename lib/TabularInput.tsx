@@ -16,6 +16,7 @@ import {
 	ChangeEventHandler,
 	ColumnDefinition,
 	RichColumnDefinition,
+	RowQuery,
 } from "./TypeDefinitions.ts";
 import { HeaderRow } from "./HeaderRow.tsx";
 import {
@@ -41,6 +42,7 @@ export function TabularInput({
 	highlightRange,
 	dragHandle,
 	columns,
+	shouldAllowDeleteRow,
 }: {
 	/** The controlled value of the input */
 	value?: string;
@@ -66,6 +68,8 @@ export function TabularInput({
 	dragHandle?: React.ReactNode;
 	/** Description of the columns used. If not provided, the number of columns will be deduced from `value` or `defaultValue`. */
 	columns?: ColumnDefinition;
+	/** Should the delete button on a given row be enabled? */
+	shouldAllowDeleteRow?: RowQuery;
 }): React.JSX.Element | null {
 	const [rootEl, setRootEl] = useState<HTMLElement | null>(null);
 	const externalValue = useRef<string | undefined>(value);
@@ -79,6 +83,9 @@ export function TabularInput({
 			value: value ?? defaultValue ?? "",
 			recordSeparator: recordSeparator ?? DEFAULT_RECORD_SEPARATOR,
 			fieldSeparator: fieldSeparator ?? DEFAULT_FIELD_SEPARATOR,
+			callbacks: {
+				shouldAllowDeleteRow,
+			},
 		},
 		stateInitializer,
 	);
@@ -156,6 +163,14 @@ export function TabularInput({
 
 		el.focus();
 	}, [rootEl, state.demandFocus]);
+
+	useEffect(() => {
+		dispatch({
+			type: "CHANGE_CALLBACK",
+			name: "shouldAllowDeleteRow",
+			callback: shouldAllowDeleteRow,
+		});
+	}, [shouldAllowDeleteRow]);
 
 	const onKeyDown = useCallback(
 		(e: React.KeyboardEvent<HTMLElement>) => {
@@ -245,6 +260,12 @@ export function TabularInput({
 						}
 						fieldSeparator={state.fieldSeparator}
 						deleteButtonLabel={deleteButtonLabel}
+						deleteDisabled={
+							!state.callbacks.shouldAllowDeleteRow?.(
+								index,
+								state.currentValue.length,
+							)
+						}
 					/>
 				))}
 				{showInsertButton ? (

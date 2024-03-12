@@ -1,9 +1,14 @@
 import { TabularInput } from "@components/TabularInput";
 import "./App.css";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 function App() {
 	const [value, setValue] = useState("One\tTwo\tThree B\nFour\tFive\tSix");
+
+	const shouldAllowDeleteRow = useCallback((_: number, length: number) => {
+		if (length > 1) return true;
+		return false;
+	}, []);
 
 	return (
 		<>
@@ -32,6 +37,7 @@ function App() {
 				insertButtonLabel={"Add row"}
 				deleteButtonLabel={"Del"}
 				onChange={setValue}
+				shouldAllowDeleteRow={shouldAllowDeleteRow}
 			/>
 			<textarea
 				value={value}

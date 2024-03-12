@@ -4,8 +4,8 @@
 	text-align: initial;
 
 	--tabular-input-cell-padding-default: 3px;
+	--tabular-input-row-hover-height-default: 3px;
 	--tabular-input-row-hover-color-default: Highlight;
 	--tabular-input-button-hover-background-default: Highlight;
 	--tabular-input-button-hover-color-default: HighlightText;
-	--tabular-input-row-hover-height-default: 3px;
 }

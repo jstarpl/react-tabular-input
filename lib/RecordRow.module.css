@@ -14,7 +14,8 @@
 
 .RecordRowDragOver {
 	grid-column: 1 / -1;
-	grid-row: 1;
+	grid-row: 1 / -1;
+	/* justify-self: center; */
 	background: var(
 		--tabular-input-row-hover-color,
 		var(--tabular-input-row-hover-color-default)
@@ -28,6 +29,16 @@
 				--tabular-input-row-hover-height,
 				var(--tabular-input-row-hover-height-default)
 			) * -1
+	);
+	transform: translate(
+		0,
+		calc(
+			1em +
+				var(
+					--tabular-input-row-hover-height,
+					var(--tabular-input-row-hover-height-default)
+				) * -1
+		)
 	);
 	pointer-events: none;
 }
