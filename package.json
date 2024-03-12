@@ -5,7 +5,8 @@
   "main": "./dist/react-tabular-input.js",
   "types": "./dist/main.d.ts",
   "homepage": "https://github.com/jstarpl/react-tabular-input",
-  "readme": "",
+  "readme": "README.md",
+  "license": "MIT",
   "files": [
     "dist",
     "README.md"
