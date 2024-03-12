@@ -4,10 +4,16 @@
   "type": "module",
   "main": "./dist/react-tabular-input.js",
   "types": "./dist/main.d.ts",
+  "homepage": "https://github.com/jstarpl/react-tabular-input",
+  "readme": "",
   "files": [
     "dist",
     "README.md"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jstarpl/react-tabular-input.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --p ./tsconfig.build.json && vite build",
