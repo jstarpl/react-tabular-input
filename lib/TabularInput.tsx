@@ -250,7 +250,8 @@ export function TabularInput({
 						record={record}
 						index={index}
 						key={index}
-						columns={columnsCount}
+						columnsCount={columnsCount}
+						columns={columns}
 						draggable={draggable ?? false}
 						dragHandle={dragHandle}
 						highlight={

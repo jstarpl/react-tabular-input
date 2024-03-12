@@ -5,6 +5,7 @@ export type RichColumnDefinition = {
 	label?: ReactElement | string | null;
 	width: string;
 	tag: string | number;
+	datalistId?: string;
 };
 export type ColumnDefinition = string[] | RichColumnDefinition[];
 export type Record = string[];

@@ -1,11 +1,12 @@
 import React, { useCallback, useContext, useRef, useState } from "react";
 import classes from "./RecordRow.module.css";
 import { DispatchContext } from "./reducer";
-import { CUSTOM_MIME_TYPE } from "./TypeDefinitions";
+import { CUSTOM_MIME_TYPE, ColumnDefinition } from "./TypeDefinitions";
 
 export const RecordRow = React.memo(function RecordRow({
 	record,
 	index,
+	columnsCount,
 	columns,
 	fieldSeparator,
 	deleteButtonLabel,
@@ -16,7 +17,8 @@ export const RecordRow = React.memo(function RecordRow({
 }: {
 	record: string[];
 	index: number;
-	columns: number;
+	columnsCount: number;
+	columns: ColumnDefinition | undefined;
 	fieldSeparator: string | undefined;
 	deleteButtonLabel: React.ReactNode;
 	draggable: boolean;
@@ -119,7 +121,7 @@ export const RecordRow = React.memo(function RecordRow({
 		dispatch({
 			type: "DEMAND_FOCUS",
 			index: index - 1,
-			cell: columns - 1,
+			cell: columnsCount - 1,
 		});
 	}
 
@@ -154,12 +156,12 @@ export const RecordRow = React.memo(function RecordRow({
 			return;
 
 		const column = Number.parseInt(e.target.dataset["column"] ?? "0");
-		if (column === columns - 1) return;
+		if (column === columnsCount - 1) return;
 
 		dispatch({
 			type: "DEMAND_FOCUS",
 			index: index,
-			cell: columns - 1,
+			cell: columnsCount - 1,
 		});
 	}
 
@@ -250,7 +252,11 @@ export const RecordRow = React.memo(function RecordRow({
 	}
 
 	const allCollumns: React.ReactNode[] = [];
-	for (let i = 0; i < columns; i++) {
+	for (let i = 0; i < columnsCount; i++) {
+		const columnDef = columns?.[i];
+		let list: string | undefined;
+		if (typeof columnDef === "object") list = columnDef.datalistId;
+
 		allCollumns.push(
 			<div
 				className={`TabularInput__RecordRowCell ${classes.RecordRowCell}`}
@@ -263,6 +269,7 @@ export const RecordRow = React.memo(function RecordRow({
 					type="text"
 					className={`TabularInput__RecordRowInput ${classes.RecordRowInput}`}
 					value={record[i] ?? ""}
+					list={list}
 					data-index={index}
 					data-column={i}
 					onPaste={onPaste}
