@@ -30,6 +30,7 @@ const DEFAULT_RECORD_SEPARATOR = "\n";
 const DEFAULT_FIELD_SEPARATOR = "\t";
 
 export function TabularInput({
+	className,
 	value,
 	defaultValue,
 	onChange,
@@ -44,6 +45,7 @@ export function TabularInput({
 	columns,
 	shouldAllowDeleteRow,
 }: {
+	className?: string;
 	/** The controlled value of the input */
 	value?: string;
 	/** The intial value of the input when running uncontrolled */
@@ -69,7 +71,7 @@ export function TabularInput({
 	/** Description of the columns used. If not provided, the number of columns will be deduced from `value` or `defaultValue`. */
 	columns?: ColumnDefinition;
 	/** Should the delete button on a given row be enabled? */
-	shouldAllowDeleteRow?: RowQuery;
+	shouldAllowDeleteRow?: RowQuery | true;
 }): React.JSX.Element | null {
 	const [rootEl, setRootEl] = useState<HTMLElement | null>(null);
 	const externalValue = useRef<string | undefined>(value);
@@ -181,7 +183,10 @@ export function TabularInput({
 			const key = e.key;
 			let code = e.code;
 
-			if (targetEl instanceof HTMLInputElement && !e.altKey) {
+			if (
+				targetEl instanceof HTMLInputElement &&
+				(!e.altKey || e.key.length === 1)
+			) {
 				if (targetEl.selectionStart !== targetEl.selectionEnd) return;
 				if (targetEl.selectionStart !== 0 && code === "ArrowLeft") return;
 				if (
@@ -233,7 +238,7 @@ export function TabularInput({
 
 	return (
 		<div
-			className={`TabularInput ${classes.TabularInput}`}
+			className={`TabularInput ${classes.TabularInput} ${className}`}
 			style={rootStyle}
 			ref={setRootEl}
 			onKeyDown={onKeyDown}
@@ -262,6 +267,7 @@ export function TabularInput({
 						fieldSeparator={state.fieldSeparator}
 						deleteButtonLabel={deleteButtonLabel}
 						deleteDisabled={
+							typeof state.callbacks.shouldAllowDeleteRow === "function" &&
 							!state.callbacks.shouldAllowDeleteRow?.(
 								index,
 								state.currentValue.length,

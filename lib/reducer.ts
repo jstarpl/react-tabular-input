@@ -11,7 +11,7 @@ export type ComponentState = {
 	stringifiedValue: string;
 	demandFocus: [number, number] | null;
 	callbacks: {
-		shouldAllowDeleteRow?: RowQuery;
+		shouldAllowDeleteRow?: RowQuery | true;
 	};
 };
 
@@ -21,7 +21,7 @@ export type InitializerProps = {
 	recordSeparator: string;
 	fieldSeparator: string;
 	callbacks: {
-		shouldAllowDeleteRow?: RowQuery;
+		shouldAllowDeleteRow?: RowQuery | true;
 	};
 };
 
@@ -65,7 +65,7 @@ export type Action =
 	| {
 			type: "CHANGE_CALLBACK";
 			name: keyof ComponentState["callbacks"];
-			callback: RowQuery | undefined;
+			callback: RowQuery | true | undefined;
 	  };
 
 export function stateReducer(
@@ -125,6 +125,7 @@ export function stateReducer(
 		}
 		case "DELETE_ROW": {
 			if (
+				state.callbacks.shouldAllowDeleteRow === true ||
 				state.callbacks.shouldAllowDeleteRow?.(
 					action.index,
 					state.currentValue.length,

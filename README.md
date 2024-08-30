@@ -11,32 +11,32 @@ npm i -S @jstarpl/react-tabular-input
 ## Use
 
 ```JSX
-    <TabularInput
-        value={value}
-        columns={[
-            {
-                label: "Column 1", // string or JSX
-                tag: "C1", // needs to be unique
-                width: "2fr", // CSS Grid column width string
-            },
-            {
-                label: <>Column 2</>,
-                tag: "C2",
-                width: "100px",
-            },
-            {
-                label: <em>Column 3</em>,
-                tag: "C3",
-                width: "3fr",
-            },
-        ]}
-        showInsertButton
-        draggable
-        highlightRange={[0, 1]} // highlight rows from first index, up to, but excluding second index
-        insertButtonLabel="Add new item" // string or JSX
-        deleteButtonLabel={<DeleteIcon />}
-        onChange={setValue}
-        shouldAllowDeleteRow={shouldAllowDeleteRow}
+<TabularInput
+    value={value}
+    columns={[
+        {
+            label: "Column 1", // string or JSX
+            tag: "C1", // needs to be unique
+            width: "2fr", // CSS Grid column width string
+        },
+        {
+            label: <>Column 2</>,
+            tag: "C2",
+            width: "100px",
+        },
+        {
+            label: <em>Column 3</em>,
+            tag: "C3",
+            width: "3fr",
+        },
+    ]}
+    showInsertButton
+    draggable
+    highlightRange={[0, 1]} // highlight rows from first index, up to, but excluding second index
+    insertButtonLabel="Add new item" // string or JSX
+    deleteButtonLabel={<DeleteIcon />}
+    onChange={setValue}
+    shouldAllowDeleteRow={(recordIndex, recordCount) => true}
     />
 ```
 
