@@ -238,7 +238,7 @@ export function TabularInput({
 
 	return (
 		<div
-			className={`TabularInput ${classes.TabularInput} ${className}`}
+			className={`TabularInput ${classes.TabularInput} ${className || ""}`}
 			style={rootStyle}
 			ref={setRootEl}
 			onKeyDown={onKeyDown}
