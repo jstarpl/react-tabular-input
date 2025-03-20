@@ -216,7 +216,12 @@ export function TabularInput({
 				return;
 			}
 
-			if (e.altKey) e.preventDefault();
+			/** Prevent accidental navigation backwards/forwards in history */
+			if (
+				["ArrowLeft", "ArrowUp", "ArrowDown", "ArrowRight"].includes(key) &&
+				e.altKey
+			)
+				e.preventDefault();
 
 			const nextFocus = getNextFocus(targetEl, code, rootEl);
 			if (!nextFocus) return;
